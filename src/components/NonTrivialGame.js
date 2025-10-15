@@ -8,6 +8,8 @@ const NonTrivialGame = () => {
   const [gameActive, setGameActive] = useState(false);
   const [showGame, setShowGame] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const questions = [
     {
@@ -73,6 +75,8 @@ const NonTrivialGame = () => {
     if (!gameActive) return;
     
     setGameActive(false);
+    setSelectedAnswer(selectedIndex);
+    setShowFeedback(true);
     const question = questions[currentQuestionIndex];
     
     if (selectedIndex === question.correct) {
@@ -84,6 +88,8 @@ const NonTrivialGame = () => {
           setCurrentQuestionIndex(prev => prev + 1);
           setTimeLeft(10);
           setGameActive(true);
+          setSelectedAnswer(null);
+          setShowFeedback(false);
         }
       }, 2000);
     } else {
@@ -111,6 +117,8 @@ const NonTrivialGame = () => {
     setGameActive(false);
     setShowResults(false);
     setShowGame(false);
+    setSelectedAnswer(null);
+    setShowFeedback(false);
     
     setTimeout(() => {
       setShowGame(true);
@@ -150,16 +158,28 @@ const NonTrivialGame = () => {
               </div>
               <div className="question-text">{currentQuestion?.question}</div>
               <div className="options-container">
-                {currentQuestion?.options.map((option, index) => (
-                  <button
-                    key={index}
-                    className="option-btn"
-                    onClick={() => selectAnswer(index)}
-                    disabled={!gameActive}
-                  >
-                    {option}
-                  </button>
-                ))}
+                {currentQuestion?.options.map((option, index) => {
+                  let buttonClass = "option-btn";
+                  
+                  if (showFeedback) {
+                    if (index === currentQuestion.correct) {
+                      buttonClass += " correct";
+                    } else if (index === selectedAnswer && selectedAnswer !== currentQuestion.correct) {
+                      buttonClass += " incorrect";
+                    }
+                  }
+                  
+                  return (
+                    <button
+                      key={index}
+                      className={buttonClass}
+                      onClick={() => selectAnswer(index)}
+                      disabled={!gameActive}
+                    >
+                      {option}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
