@@ -1,0 +1,237 @@
+.left-sidebar {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-card {
+  background-color: var(--linkedin-white);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--linkedin-gray-border);
+  position: relative;
+}
+
+.profile-banner {
+  height: 54px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+  position: relative;
+}
+
+.premium-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: var(--linkedin-white);
+  color: var(--linkedin-blue);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.profile-content {
+  padding: 0 16px 16px;
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin: -36px auto 8px;
+  border: 2px solid var(--linkedin-white);
+  overflow: hidden;
+  background-color: var(--linkedin-gray-border);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info {
+  margin-top: 8px;
+}
+
+.profile-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--linkedin-black);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.linkedin-icon {
+  background-color: var(--linkedin-blue);
+  color: white;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.profile-title {
+  font-size: 14px;
+  color: var(--linkedin-gray);
+  margin-bottom: 2px;
+}
+
+.profile-location {
+  font-size: 12px;
+  color: var(--linkedin-gray);
+  margin-bottom: 8px;
+}
+
+.profile-link {
+  font-size: 12px;
+  color: var(--linkedin-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+}
+
+.analytics-section {
+  background-color: var(--linkedin-white);
+  border-radius: 8px;
+  border: 1px solid var(--linkedin-gray-border);
+  padding: 16px;
+}
+
+.analytics-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.analytics-item:last-child {
+  margin-bottom: 12px;
+}
+
+.analytics-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--linkedin-blue);
+}
+
+.analytics-label {
+  font-size: 12px;
+  color: var(--linkedin-gray);
+}
+
+.recruiter-button {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid var(--linkedin-blue);
+  color: var(--linkedin-blue);
+  padding: 8px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.recruiter-button:hover {
+  background-color: var(--linkedin-blue-light);
+}
+
+.section {
+  background-color: var(--linkedin-white);
+  border-radius: 8px;
+  border: 1px solid var(--linkedin-gray-border);
+  padding: 16px;
+}
+
+.section-header h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--linkedin-black);
+  margin-bottom: 12px;
+}
+
+.section-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+}
+
+.section-item:hover {
+  background-color: #f9fafb;
+}
+
+.item-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--linkedin-gray);
+}
+
+.flag-icon {
+  font-size: 16px;
+}
+
+.purple-icon {
+  background-color: #8b5cf6;
+  border-radius: 4px;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.item-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--linkedin-black);
+  line-height: 1.3;
+}
+
+.item-subtitle {
+  font-size: 12px;
+  color: var(--linkedin-gray);
+  margin-top: 2px;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .left-sidebar {
+    width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .left-sidebar {
+    width: 100%;
+    order: 2;
+  }
+}
+

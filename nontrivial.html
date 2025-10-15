@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non Trivial #1 - LinkedIn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f3f2ef;
+            color: #000000;
+        }
+
+        :root {
+            --linkedin-blue: #0077b5;
+            --linkedin-blue-hover: #005885;
+            --linkedin-blue-light: #e7f3ff;
+            --linkedin-gray: #666666;
+            --linkedin-gray-light: #f3f2ef;
+            --linkedin-gray-border: #e0dfdc;
+            --linkedin-white: #ffffff;
+            --linkedin-black: #000000;
+            --linkedin-green: #057642;
+            --linkedin-red: #c8102e;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--linkedin-white);
+            border-bottom: 1px solid var(--linkedin-gray-border);
+            z-index: 1000;
+            height: 52px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1128px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .linkedin-logo {
+            background-color: var(--linkedin-blue);
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 34px;
+            padding: 8px 12px 8px 40px;
+            border: 1px solid var(--linkedin-gray-border);
+            border-radius: 4px;
+            background-color: #f3f2ef;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--linkedin-gray);
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--linkedin-gray);
+            text-decoration: none;
+            gap: 4px;
+            min-width: 80px;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f2ef;
+            color: var(--linkedin-black);
+        }
+
+        .nav-item.active {
+            color: var(--linkedin-black);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background-color: var(--linkedin-blue);
+            border-radius: 1px;
+            margin-top: 8px;
+        }
+
+        .nav-item span {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .notification-badge {
+            background-color: var(--linkedin-red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        /* Feedback Bar */
+        .feedback-bar {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ea580c;
+            color: white;
+            padding: 16px 8px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            z-index: 1000;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .feedback-text {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .version-info {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            max-width: 1128px;
+            margin: 0 auto;
+            padding-top: 80px;
+            gap: 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        /* Game Card */
+        .game-card {
+            flex: 1;
+            max-width: 552px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border-radius: 12px;
+            padding: 24px;
+            color: white;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .game-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .flag-icon {
+            font-size: 20px;
+        }
+
+        .copy-score-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-score-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .game-main-title {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        /* Game Panel */
+        .game-panel {
+            width: 75%;
+            aspect-ratio: 9/16;
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-gif {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            animation: fadeInOut 3s ease-in-out;
+            opacity: 0;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) translateY(20px); }
+            20% { opacity: 1; transform: translate(-50%, -50%) translateY(0); }
+            80% { opacity: 1; transform: translate(-50%, -50%) translateY(0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-20px); }
+        }
+
+        .overlay-text-2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-weight: 500;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            animation: fadeInOut2 3s ease-in-out 3s;
+            opacity: 0;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        @keyframes fadeInOut2 {
+            0% { opacity: 0; transform: translate(-50%, -50%) translateY(20px); }
+            20% { opacity: 1; transform: translate(-50%, -50%) translateY(0); }
+            80% { opacity: 1; transform: translate(-50%, -50%) translateY(0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-20px); }
+        }
+
+        /* Game Interface */
+        .game-interface {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            color: white;
+            z-index: 3;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .question-counter {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff6b6b;
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .option-btn.correct {
+            background-color: #4caf50;
+            border-color: #4caf50;
+        }
+
+        .option-btn.incorrect {
+            background-color: #f44336;
+            border-color: #f44336;
+        }
+
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: white;
+            z-index: 4;
+        }
+
+        .results-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #ffd700;
+        }
+
+        .rankings {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .ranking-item {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            min-width: 150px;
+        }
+
+        .ranking-title {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .ranking-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .play-again-btn {
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .play-again-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .game-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-card.highlighted {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .metric-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .metric-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .metric-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .game-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .nav-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-arrow:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .leaderboard-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 16px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--linkedin-gray-border);
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            width: 30px;
+        }
+
+        .player-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--linkedin-black);
+            margin-left: 12px;
+        }
+
+        .player-status {
+            font-size: 12px;
+            color: var(--linkedin-green);
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .player-time {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+        }
+
+        .you-indicator {
+            background-color: var(--linkedin-blue-light);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--linkedin-blue);
+            font-weight: 600;
+        }
+
+        .see-full-btn {
+            width: 100%;
+            background-color: transparent;
+            border: 1px solid var(--linkedin-gray-border);
+            color: var(--linkedin-gray);
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+
+        .see-full-btn:hover {
+            background-color: #f3f2ef;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .puzzles-section {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            padding: 16px;
+        }
+
+        .section-header h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 12px;
+        }
+
+        .puzzle-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            text-decoration: none;
+            color: inherit;
+            justify-content: space-between;
+        }
+
+        .puzzle-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .puzzle-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .puzzle-content {
+            flex: 1;
+        }
+
+        .puzzle-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 2px;
+        }
+
+        .puzzle-players {
+            font-size: 12px;
+            color: var(--linkedin-gray);
+        }
+
+        .puzzle-arrow {
+            font-size: 18px;
+            color: var(--linkedin-gray);
+        }
+
+        /* Messaging Widget */
+        .messaging-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            min-width: 200px;
+            padding: 12px 16px;
+        }
+
+        .messaging-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .messaging-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .messaging-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--linkedin-gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--linkedin-gray);
+        }
+
+        .messaging-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+        }
+
+        .messaging-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .messaging-action {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--linkedin-gray);
+        }
+
+        .messaging-action:hover {
+            background-color: #f3f2ef;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding-top: 60px;
+            }
+            
+            .right-sidebar {
+                width: 100%;
+            }
+            
+            .feedback-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Feedback Bar -->
+    <div class="feedback-bar">
+        <div class="feedback-text">Share feedback</div>
+        <div class="version-info">Alpha is off</div>
+        <div class="version-info">1.13.39773</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="linkedin-logo">in</div>
+                <div class="search-container">
+                    <input type="text" placeholder="I'm looking for..." class="search-input">
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="nav-item active">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item">
+                    <span>👥</span>
+                    <span>My Network</span>
+                </div>
+                <div class="nav-item">
+                    <span>💼</span>
+                    <span>Jobs</span>
+                </div>
+                <div class="nav-item">
+                    <span>💬</span>
+                    <span>Messaging</span>
+                    <span class="notification-badge">5</span>
+                </div>
+                <div class="nav-item">
+                    <span>🔔</span>
+                    <span>Notifications</span>
+                </div>
+            </nav>
+            <div class="header-nav">
+                <div class="nav-item">
+                    <span>👤</span>
+                    <span>Me</span>
+                </div>
+                <div class="nav-item">
+                    <span>📊</span>
+                    <span>For Business</span>
+                </div>
+                <div class="nav-item">
+                    <span>👔</span>
+                    <span>Recruiter</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Game Card -->
+        <div class="game-card">
+            <div class="game-header">
+                <div class="game-title">
+                    <span class="flag-icon">🏁</span>
+                    Non Trivial #1
+                </div>
+                <button class="copy-score-btn">Copy score</button>
+            </div>
+
+            <!-- Game Panel -->
+            <div class="game-panel">
+                <img src="game-host.gif" alt="Game Host" class="game-gif">
+                <div class="game-overlay">
+                    <div class="overlay-text">You're playing Non-Trivial</div>
+                    <div class="overlay-text-2">A daily live trivia game, based on LinkedIn news and events</div>
+                </div>
+                
+                <!-- Game Interface -->
+                <div class="game-interface" id="gameInterface">
+                    <div class="game-header">
+                        <div class="question-counter">Question <span id="currentQuestion">1</span> of 5</div>
+                        <div class="timer" id="timer">10</div>
+                    </div>
+                    <div class="question-text" id="questionText">Loading question...</div>
+                    <div class="options-container" id="optionsContainer">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Results Screen -->
+                <div class="results-screen" id="resultsScreen">
+                    <div class="results-title">Game Complete!</div>
+                    <div class="score-display" id="finalScore">0/5</div>
+                    <div class="rankings">
+                        <div class="ranking-item">
+                            <div class="ranking-title">Global Rank</div>
+                            <div class="ranking-value" id="globalRank">#1,234</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="ranking-title">Network Rank</div>
+                            <div class="ranking-value" id="networkRank">#12</div>
+                        </div>
+                    </div>
+                    <button class="play-again-btn" onclick="restartGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="puzzles-section">
+                <div class="section-header">
+                    <h4>Today's puzzles</h4>
+                </div>
+                <a href="nontrivial.html" class="puzzle-item">
+                    <div class="puzzle-icon">🧩</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Non Trivial #1</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">🔢</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Solve Mini Sudoku</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">🔲</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Solve Tango</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">👑</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Solve Queens</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">📍</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Solve Pinpoint</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">🧗</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Solve Crossclimb</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messaging Widget -->
+    <div class="messaging-widget">
+        <div class="messaging-header">
+            <div class="messaging-user">
+                <div class="messaging-avatar">👤</div>
+                <span class="messaging-label">Messaging</span>
+            </div>
+            <div class="messaging-actions">
+                <button class="messaging-action">⋯</button>
+                <button class="messaging-action">📹</button>
+                <button class="messaging-action">−</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 10;
+        let timerInterval;
+        let gameActive = false;
+
+        // Hardcoded trivia questions
+        const questions = [
+            {
+                question: "Which company recently announced a $13 billion investment in US manufacturing?",
+                options: ["Tesla", "Stellantis", "Ford", "General Motors"],
+                correct: 1
+            },
+            {
+                question: "What percentage of LinkedIn users are active daily?",
+                options: ["25%", "40%", "60%", "75%"],
+                correct: 1
+            },
+            {
+                question: "Which LinkedIn feature was introduced to help professionals showcase their skills?",
+                options: ["LinkedIn Stories", "LinkedIn Learning", "LinkedIn Skills Assessment", "LinkedIn Events"],
+                correct: 2
+            },
+            {
+                question: "What is the average time professionals spend on LinkedIn per session?",
+                options: ["5 minutes", "17 minutes", "30 minutes", "45 minutes"],
+                correct: 1
+            },
+            {
+                question: "Which industry has the highest engagement rate on LinkedIn?",
+                options: ["Technology", "Finance", "Healthcare", "Education"],
+                correct: 0
+            }
+        ];
+
+        // Start the game after animations complete
+        setTimeout(() => {
+            startGame();
+        }, 7000); // 6 seconds for animations + 1 second delay
+
+        function startGame() {
+            gameActive = true;
+            document.getElementById('gameInterface').style.display = 'flex';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                endGame();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionText').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            console.log('Question loaded:', currentQuestionIndex + 1, 'Game active:', gameActive);
+            startTimer();
+        }
+
+        function startTimer() {
+            timeLeft = 10;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (!gameActive) return;
+            
+            clearInterval(timerInterval);
+            gameActive = false;
+            
+            const question = questions[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            // Show correct/incorrect answers
+            buttons.forEach((btn, index) => {
+                if (index === question.correct) {
+                    btn.classList.add('correct');
+                } else if (index === selectedIndex && selectedIndex !== question.correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            // Check if answer is correct
+            if (selectedIndex === question.correct) {
+                score++;
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    // Reset button states and game state
+                    buttons.forEach(btn => {
+                        btn.classList.remove('correct', 'incorrect', 'disabled');
+                    });
+                    gameActive = true;
+                    loadQuestion();
+                }, 2000);
+            } else {
+                // Wrong answer - game ends
+                setTimeout(() => {
+                    endGame();
+                }, 2000);
+            }
+        }
+
+        function timeUp() {
+            if (!gameActive) return;
+            
+            gameActive = false;
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.classList.add('disabled'));
+            
+            // Show correct answer
+            const question = questions[currentQuestionIndex];
+            buttons[question.correct].classList.add('correct');
+            
+            setTimeout(() => {
+                endGame();
+            }, 2000);
+        }
+
+        function endGame() {
+            document.getElementById('gameInterface').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'flex';
+            
+            // Update final score
+            document.getElementById('finalScore').textContent = `${score}/5`;
+            
+            // Generate random rankings
+            const globalRank = Math.floor(Math.random() * 10000) + 1;
+            const networkRank = Math.floor(Math.random() * 100) + 1;
+            
+            document.getElementById('globalRank').textContent = `#${globalRank.toLocaleString()}`;
+            document.getElementById('networkRank').textContent = `#${networkRank}`;
+        }
+
+        function restartGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            gameActive = false;
+            
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('gameInterface').style.display = 'none';
+            
+            // Restart the game
+            setTimeout(() => {
+                startGame();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

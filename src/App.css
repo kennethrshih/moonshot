@@ -1,0 +1,32 @@
+.app {
+  min-height: 100vh;
+  background-color: var(--linkedin-gray-light);
+  position: relative;
+}
+
+.main-container {
+  display: flex;
+  max-width: 1128px;
+  margin: 0 auto;
+  padding-top: 80px; /* Account for fixed header */
+  gap: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .main-container {
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    padding-top: 60px;
+  }
+}
+

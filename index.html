@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn UI Rebuild</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f3f2ef;
+            color: #000000;
+        }
+
+        :root {
+            --linkedin-blue: #0077b5;
+            --linkedin-blue-hover: #005885;
+            --linkedin-blue-light: #e7f3ff;
+            --linkedin-gray: #666666;
+            --linkedin-gray-light: #f3f2ef;
+            --linkedin-gray-border: #e0dfdc;
+            --linkedin-white: #ffffff;
+            --linkedin-black: #000000;
+            --linkedin-green: #057642;
+            --linkedin-red: #c8102e;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--linkedin-white);
+            border-bottom: 1px solid var(--linkedin-gray-border);
+            z-index: 1000;
+            height: 52px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1128px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .linkedin-logo {
+            background-color: var(--linkedin-blue);
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 34px;
+            padding: 8px 12px 8px 40px;
+            border: 1px solid var(--linkedin-gray-border);
+            border-radius: 4px;
+            background-color: #f3f2ef;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--linkedin-gray);
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--linkedin-gray);
+            text-decoration: none;
+            gap: 4px;
+            min-width: 80px;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f2ef;
+            color: var(--linkedin-black);
+        }
+
+        .nav-item.active {
+            color: var(--linkedin-black);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background-color: var(--linkedin-blue);
+            border-radius: 1px;
+            margin-top: 8px;
+        }
+
+        .nav-item span {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            max-width: 1128px;
+            margin: 0 auto;
+            padding-top: 80px;
+            gap: 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        /* Left Sidebar */
+        .left-sidebar {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .profile-card {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--linkedin-gray-border);
+            position: relative;
+        }
+
+        .profile-banner {
+            height: 54px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            position: relative;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: var(--linkedin-white);
+            color: var(--linkedin-blue);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .profile-content {
+            padding: 0 16px 16px;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: -36px auto 8px;
+            border: 2px solid var(--linkedin-white);
+            overflow: hidden;
+            background-color: var(--linkedin-gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--linkedin-gray);
+        }
+
+        .profile-info {
+            margin-top: 8px;
+        }
+
+        .profile-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .linkedin-icon {
+            background-color: var(--linkedin-blue);
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .profile-title {
+            font-size: 14px;
+            color: var(--linkedin-gray);
+            margin-bottom: 2px;
+        }
+
+        .profile-location {
+            font-size: 12px;
+            color: var(--linkedin-gray);
+            margin-bottom: 8px;
+        }
+
+        .analytics-section {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            padding: 16px;
+        }
+
+        .analytics-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .analytics-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-blue);
+        }
+
+        .analytics-label {
+            font-size: 12px;
+            color: var(--linkedin-gray);
+        }
+
+        .recruiter-button {
+            width: 100%;
+            background-color: transparent;
+            border: 1px solid var(--linkedin-blue);
+            color: var(--linkedin-blue);
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .section {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            padding: 16px;
+        }
+
+        .section-header h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 12px;
+        }
+
+        .section-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .section-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .item-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--linkedin-gray);
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--linkedin-black);
+        }
+
+        /* Main Feed */
+        .main-feed {
+            flex: 1;
+            max-width: 552px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .start-post-card {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            padding: 16px;
+        }
+
+        .post-input-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--linkedin-gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--linkedin-gray);
+        }
+
+        .post-input {
+            flex: 1;
+            background-color: #f3f2ef;
+            border: 1px solid var(--linkedin-gray-border);
+            border-radius: 24px;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 14px;
+            color: var(--linkedin-gray);
+            cursor: pointer;
+        }
+
+        .post-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .post-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: transparent;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--linkedin-gray);
+        }
+
+        .post-option:hover {
+            background-color: #f3f2ef;
+        }
+
+        .option-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .video-icon { background-color: var(--linkedin-green); }
+        .photo-icon { background-color: var(--linkedin-blue); }
+        .article-icon { background-color: var(--linkedin-red); }
+
+        .feed-post {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            padding: 16px;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .post-author {
+            display: flex;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--linkedin-gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--linkedin-gray);
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 2px;
+        }
+
+        .author-badge {
+            background-color: var(--linkedin-blue);
+            color: white;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .author-title {
+            font-size: 12px;
+            color: var(--linkedin-black);
+            margin-bottom: 2px;
+        }
+
+        .author-description {
+            font-size: 12px;
+            color: var(--linkedin-gray);
+            margin-bottom: 2px;
+        }
+
+        .author-link {
+            font-size: 12px;
+            color: var(--linkedin-blue);
+            cursor: pointer;
+        }
+
+        .post-text {
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--linkedin-black);
+            margin: 12px 0;
+        }
+
+        .embedded-card {
+            border: 1px solid var(--linkedin-gray-border);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--linkedin-gray-border);
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+        }
+
+        .card-pages {
+            font-size: 12px;
+            color: var(--linkedin-gray);
+        }
+
+        .card-content {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Times New Roman', serif;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .news-section, .puzzles-section {
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            padding: 16px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .section-header h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+        }
+
+        .news-item {
+            cursor: pointer;
+            margin-bottom: 12px;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .news-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .news-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 4px;
+        }
+
+        .news-meta {
+            font-size: 12px;
+            color: var(--linkedin-gray);
+        }
+
+        .puzzle-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .puzzle-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .puzzle-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .puzzle-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+            margin-bottom: 2px;
+        }
+
+        .puzzle-players {
+            font-size: 12px;
+            color: var(--linkedin-gray);
+        }
+
+        .puzzle-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-pill {
+            background-color: #dc2626;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            animation: flash 1.5s infinite;
+        }
+
+        @keyframes flash {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .puzzles-section .puzzle-item {
+            text-decoration: none;
+            color: inherit;
+            justify-content: space-between;
+        }
+
+        .puzzle-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .puzzle-arrow {
+            font-size: 18px;
+            color: var(--linkedin-gray);
+            margin-left: 8px;
+        }
+
+        /* Messaging Widget */
+        .messaging-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--linkedin-white);
+            border-radius: 8px;
+            border: 1px solid var(--linkedin-gray-border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            min-width: 200px;
+            padding: 12px 16px;
+        }
+
+        .messaging-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .messaging-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--linkedin-gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--linkedin-gray);
+        }
+
+        .messaging-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--linkedin-black);
+        }
+
+        /* Feedback Bar */
+        .feedback-bar {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ea580c;
+            color: white;
+            padding: 16px 8px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            z-index: 1000;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .feedback-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding-top: 60px;
+            }
+            
+            .left-sidebar, .right-sidebar {
+                width: 100%;
+            }
+            
+            .feedback-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Feedback Bar -->
+    <div class="feedback-bar">
+        <div class="feedback-text">Share feedback</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <div class="linkedin-logo">in</div>
+                <div class="search-container">
+                    <input type="text" placeholder="I'm looking for..." class="search-input">
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="nav-item active">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item">
+                    <span>👥</span>
+                    <span>My Network</span>
+                </div>
+                <div class="nav-item">
+                    <span>💼</span>
+                    <span>Jobs</span>
+                </div>
+                <div class="nav-item">
+                    <span>💬</span>
+                    <span>Messaging</span>
+                </div>
+                <div class="nav-item">
+                    <span>🔔</span>
+                    <span>Notifications</span>
+                </div>
+            </nav>
+            <div class="header-nav">
+                <div class="nav-item">
+                    <span>👤</span>
+                    <span>Me</span>
+                </div>
+                <div class="nav-item">
+                    <span>📊</span>
+                    <span>For Business</span>
+                </div>
+                <div class="nav-item">
+                    <span>👔</span>
+                    <span>Recruiter</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="profile-card">
+                <div class="profile-banner">
+                    <div class="premium-badge">Premium</div>
+                </div>
+                <div class="profile-content">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-info">
+                        <div class="profile-name">
+                            Kenneth Shih
+                            <span class="linkedin-icon">in</span>
+                        </div>
+                        <div class="profile-title">Product @ Linkedin</div>
+                        <div class="profile-location">Los Angeles, California</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-section">
+                <div class="analytics-item">
+                    <span class="analytics-number">286</span>
+                    <span class="analytics-label">Profile viewers</span>
+                </div>
+                <div class="analytics-item">
+                    <span class="analytics-number">1,106</span>
+                    <span class="analytics-label">Post impressions</span>
+                </div>
+                <button class="recruiter-button">Go to Recruiter</button>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h4>My pages (2)</h4>
+                </div>
+                <div class="section-item">
+                    <div class="item-icon">🏳️</div>
+                    <span class="item-title">Preferred Nation</span>
+                </div>
+                <div class="section-item">
+                    <div class="item-icon">🟣</div>
+                    <span class="item-title">LB Brands</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h4>Grow your business faster</h4>
+                </div>
+                <div class="section-item">
+                    <div class="item-icon">⭐</div>
+                    <span class="item-title">Try Premium Page</span>
+                </div>
+                <div class="section-item">
+                    <div class="item-icon">📢</div>
+                    <span class="item-title">Advertise on LinkedIn</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h4>Saved items</h4>
+                </div>
+                <div class="section-item">
+                    <div class="item-icon">👥</div>
+                    <span class="item-title">Groups</span>
+                </div>
+                <div class="section-item">
+                    <div class="item-icon">📰</div>
+                    <span class="item-title">Newsletters</span>
+                </div>
+                <div class="section-item">
+                    <div class="item-icon">📅</div>
+                    <span class="item-title">Events</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Feed -->
+        <div class="main-feed">
+            <div class="start-post-card">
+                <div class="post-input-container">
+                    <div class="user-avatar">👤</div>
+                    <button class="post-input">Start a post</button>
+                </div>
+                <div class="post-options">
+                    <button class="post-option">
+                        <div class="option-icon video-icon">▶️</div>
+                        <span>Video</span>
+                    </button>
+                    <button class="post-option">
+                        <div class="option-icon photo-icon">📷</div>
+                        <span>Photo</span>
+                    </button>
+                    <button class="post-option">
+                        <div class="option-icon article-icon">📝</div>
+                        <span>Write article</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="feed-post">
+                <div class="post-header">
+                    <div class="post-author">
+                        <div class="author-avatar">👤</div>
+                        <div class="author-info">
+                            <div class="author-name">
+                                Aakash Gupta
+                                <span class="linkedin-icon">in</span>
+                                <span class="author-badge">1st</span>
+                            </div>
+                            <div class="author-title">The AI PM Guy</div>
+                            <div class="author-description">Helping you land your next job + succeed in your...</div>
+                            <div class="author-link">View my newsletter 🚀</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-text">
+                    Product discovery is the number 1 skill for PMs.
+                    <br><br>
+                    Here's how to use AI to 10x your discovery:... <span style="color: #0077b5;">more</span>
+                </div>
+
+                <div class="embedded-card">
+                    <div class="card-header">
+                        <span class="card-title">How to Do Product Discovery in the AI Era</span>
+                        <span class="card-pages">11 pages</span>
+                    </div>
+                    <div class="card-content">
+                        How to Do Product Discovery in the AI Era
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="news-section">
+                <div class="section-header">
+                    <h4>LinkedIn News</h4>
+                    <span>ℹ️</span>
+                </div>
+                <div class="news-item">
+                    <div class="news-title">Big banks notch a boom quarter</div>
+                    <div class="news-meta">7m ago • 21,875 readers</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-title">Walmart to allow ChatGPT checkout</div>
+                    <div class="news-meta">12m ago • 19,733 readers</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-title">Shutdown hits government services</div>
+                    <div class="news-meta">15m ago • 8,900 readers</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-title">Schultz on Starbucks' 'long game'</div>
+                    <div class="news-meta">10m ago • 995 readers</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-title">Stellantis plans $13B US investment</div>
+                    <div class="news-meta">6m ago • 629 readers</div>
+                </div>
+            </div>
+
+            <div class="puzzles-section">
+                <div class="section-header">
+                    <h4>Today's puzzles</h4>
+                </div>
+                <a href="nontrivial.html" class="puzzle-item">
+                    <div class="puzzle-icon">🧩</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Non Trivial #1</div>
+                        <div class="puzzle-status">
+                            <span class="status-pill">Starting Soon</span>
+                        </div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">🔢</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Mini Sudoku #64</div>
+                        <div class="puzzle-players">27 connections played</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">📦</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Zip #211</div>
+                        <div class="puzzle-players">45 connections played</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">💃</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Tango #372</div>
+                        <div class="puzzle-players">34 connections played</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+                <a href="#" class="puzzle-item">
+                    <div class="puzzle-icon">👑</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-name">Queens #532</div>
+                        <div class="puzzle-players">36 connections played</div>
+                    </div>
+                    <span class="puzzle-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messaging Widget -->
+    <div class="messaging-widget">
+        <div class="messaging-user">
+            <div class="messaging-avatar">👤</div>
+            <span class="messaging-label">Messaging</span>
+        </div>
+    </div>
+</body>
+</html>
