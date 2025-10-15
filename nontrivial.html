@@ -323,6 +323,51 @@
             100% { opacity: 0; transform: translate(-50%, -50%) translateY(-20px); }
         }
 
+        .overlay-text-3 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 32px;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            line-height: 1.4;
+            animation: fadeInOut3 4s ease-in-out 6s;
+        }
+
+        .overlay-text-3 .line {
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0;
+        }
+
+        .overlay-text-3 .line:nth-child(1) {
+            animation: fadeInLine 1s ease-in-out 6s forwards;
+        }
+
+        .overlay-text-3 .line:nth-child(2) {
+            animation: fadeInLine 1s ease-in-out 7s forwards;
+        }
+
+        .overlay-text-3 .line:nth-child(3) {
+            animation: fadeInLine 1s ease-in-out 8s forwards;
+        }
+
+        @keyframes fadeInLine {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInOut3 {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         /* Game Interface */
         .game-interface {
             position: absolute;
@@ -881,6 +926,11 @@
                 <div class="game-overlay">
                     <div class="overlay-text">You're playing Non-Trivial</div>
                     <div class="overlay-text-2">A daily live trivia game, based on LinkedIn news and events</div>
+                    <div class="overlay-text-3">
+                        <div class="line">3.5 million live players</div>
+                        <div class="line">200 connections playing</div>
+                        <div class="line">How well do you rank?</div>
+                    </div>
                 </div>
                 
                 <!-- Game Interface -->
@@ -989,39 +1039,39 @@
         let timerInterval;
         let gameActive = false;
 
-        // Hardcoded trivia questions
+        // Hardcoded trivia questions - Recent Business News (Last 4 weeks)
         const questions = [
             {
-                question: "Which company recently announced a $13 billion investment in US manufacturing?",
-                options: ["Tesla", "Stellantis", "Ford", "General Motors"],
+                question: "Which tech company's stock surged 15% after announcing record AI revenue in Q4?",
+                options: ["Microsoft", "Google", "Amazon", "Meta"],
+                correct: 0
+            },
+            {
+                question: "What was the Federal Reserve's latest interest rate decision in December 2024?",
+                options: ["Raised by 0.25%", "Kept unchanged at 5.25%", "Lowered by 0.25%", "Raised by 0.50%"],
                 correct: 1
             },
             {
-                question: "What percentage of LinkedIn users are active daily?",
-                options: ["25%", "40%", "60%", "75%"],
-                correct: 1
-            },
-            {
-                question: "Which LinkedIn feature was introduced to help professionals showcase their skills?",
-                options: ["LinkedIn Stories", "LinkedIn Learning", "LinkedIn Skills Assessment", "LinkedIn Events"],
+                question: "Which major retailer announced plans to close 150 stores in 2025?",
+                options: ["Walmart", "Target", "Macy's", "Kohl's"],
                 correct: 2
             },
             {
-                question: "What is the average time professionals spend on LinkedIn per session?",
-                options: ["5 minutes", "17 minutes", "30 minutes", "45 minutes"],
-                correct: 1
+                question: "What was Tesla's stock performance after the Cybertruck delivery event?",
+                options: ["+8%", "-5%", "+12%", "-2%"],
+                correct: 0
             },
             {
-                question: "Which industry has the highest engagement rate on LinkedIn?",
-                options: ["Technology", "Finance", "Healthcare", "Education"],
-                correct: 0
+                question: "Which company's CEO stepped down amid regulatory pressure in December 2024?",
+                options: ["OpenAI", "Binance", "FTX", "Coinbase"],
+                correct: 1
             }
         ];
 
         // Start the game after animations complete
         setTimeout(() => {
             startGame();
-        }, 7000); // 6 seconds for animations + 1 second delay
+        }, 10000); // 6 seconds for first two animations + 3 seconds for line-by-line + 1 second delay
 
         function startGame() {
             gameActive = true;

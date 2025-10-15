@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Info, ChevronRight, MoreHorizontal } from 'lucide-react';
 import './RightSidebar.css';
 
@@ -44,6 +45,14 @@ const RightSidebar = () => {
           <h4>Today's puzzles</h4>
         </div>
         <div className="puzzles-list">
+          <Link to="/nontrivial" className="puzzle-item">
+            <div className="puzzle-icon">🧩</div>
+            <div className="puzzle-info">
+              <div className="puzzle-name">Non Trivial #1</div>
+              <div className="puzzle-players">Starting Soon</div>
+            </div>
+            <ChevronRight size={16} className="puzzle-arrow" />
+          </Link>
           <div className="puzzle-item">
             <div className="puzzle-icon">🔢</div>
             <div className="puzzle-info">
