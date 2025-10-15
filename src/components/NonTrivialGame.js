@@ -41,6 +41,7 @@ const NonTrivialGame = () => {
     // Start the game after animations complete
     const timer = setTimeout(() => {
       setShowGame(true);
+      setGameActive(true);
     }, 10000); // 6 seconds for first two animations + 3 seconds for line-by-line + 1 second delay
 
     return () => clearTimeout(timer);
@@ -68,6 +69,7 @@ const NonTrivialGame = () => {
   };
 
   const selectAnswer = (selectedIndex) => {
+    console.log('Answer selected:', selectedIndex, 'Game active:', gameActive);
     if (!gameActive) return;
     
     setGameActive(false);
@@ -153,6 +155,7 @@ const NonTrivialGame = () => {
                     key={index}
                     className="option-btn"
                     onClick={() => selectAnswer(index)}
+                    disabled={!gameActive}
                   >
                     {option}
                   </button>

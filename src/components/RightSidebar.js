@@ -49,7 +49,9 @@ const RightSidebar = () => {
             <div className="puzzle-icon">🧩</div>
             <div className="puzzle-info">
               <div className="puzzle-name">Non Trivial #1</div>
-              <div className="puzzle-players">Starting Soon</div>
+              <div className="puzzle-status">
+                <span className="status-pill">Starting Soon</span>
+              </div>
             </div>
             <ChevronRight size={16} className="puzzle-arrow" />
           </Link>
